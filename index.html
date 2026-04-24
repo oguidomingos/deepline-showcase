@@ -4,951 +4,649 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paperclip — Agentic Workflows Showcase</title>
-<meta name="description" content="Production multi-agent AI platform. Real workflows, real outputs, real results.">
+<meta name="description" content="Multi-agent orchestration for GTM automation. 10 agents, real outputs, zero overhead.">
 <style>
-:root {
-  --bg: #0A0A0F;
-  --bg2: #0F0F18;
-  --card: #14141F;
-  --card2: #1A1A28;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.12);
-  --primary: #6366F1;
-  --primary-g: linear-gradient(135deg,#6366F1,#8B5CF6);
-  --primary-10: rgba(99,102,241,0.10);
-  --primary-20: rgba(99,102,241,0.20);
-  --primary-glow: rgba(99,102,241,0.25);
-  --green: #10B981;
-  --green-10: rgba(16,185,129,0.10);
-  --amber: #F59E0B;
-  --amber-10: rgba(245,158,11,0.10);
-  --red: #EF4444;
-  --cyan: #06B6D4;
-  --cyan-10: rgba(6,182,212,0.10);
-  --text: #E5E7EB;
-  --text-muted: #6B7280;
-  --text-dim: #9CA3AF;
-  --white: #fff;
-  --mono: 'SF Mono','Fira Code','Cascadia Code',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080C14;--bg2:#0D1422;--bg3:#111827;--border:rgba(255,255,255,.08);--accent:#6366F1;--accent2:#818CF8;--accent3:#C7D2FE;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--text:#F8FAFC;--text2:#94A3B8;--text3:#64748B;--card:rgba(255,255,255,.04);--card-hover:rgba(99,102,241,.1);--glow:rgba(99,102,241,.15)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.90);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:32px;height:52px}
-.nav-logo{font-size:16px;font-weight:800;color:var(--white);letter-spacing:-.02em;display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
-.nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--primary-g);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
-.nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-.nav-links::-webkit-scrollbar{display:none}
-.nav-link{font-size:12px;font-weight:600;color:var(--text-muted);padding:5px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s;background:none;border:none;text-transform:uppercase;letter-spacing:.06em}
-.nav-link:hover,.nav-link.active{background:var(--primary-10);color:var(--primary)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,12,20,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:700;font-size:1rem;letter-spacing:-.02em;color:var(--text);display:flex;align-items:center;gap:8px}
+.nav-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.84rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-badge{font-size:.73rem;font-weight:600;color:var(--accent3);background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);padding:4px 14px;border-radius:20px}
+@media(max-width:768px){.nav-links,.nav-badge{display:none}}
+
+/* SECTIONS */
+section{padding:6rem 2rem}
+.container{max-width:1100px;margin:0 auto}
 
 /* HERO */
-.hero{max-width:1100px;margin:0 auto;padding:120px 24px 80px;text-align:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--primary-10);border:1px solid rgba(99,102,241,.3);border-radius:20px;padding:6px 16px;font-size:11px;font-weight:700;color:var(--primary);letter-spacing:.1em;text-transform:uppercase;margin-bottom:28px}
-.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
-.hero-title{font-size:clamp(38px,6vw,72px);font-weight:900;line-height:1.0;letter-spacing:-.03em;margin-bottom:16px;color:var(--white)}
-.hero-title span{background:var(--primary-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-sub{font-size:18px;color:var(--text-muted);max-width:580px;margin:0 auto 48px;line-height:1.7}
-.hero-stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
-.hero-stat{}
-.hero-stat-value{font-size:32px;font-weight:900;color:var(--white);letter-spacing:-.02em}
-.hero-stat-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:80px 2rem 0}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(99,102,241,.18) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 80% 60%,rgba(16,185,129,.07) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,black 0%,transparent 100%)}
+.hero-content{position:relative;z-index:2;max-width:900px;margin:0 auto;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);padding:6px 18px;border-radius:20px;margin-bottom:2rem}
+.eyebrow-dot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 6px var(--green);animation:pulse 1.5s infinite}
+h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:1.5rem}
+.grad{background:linear-gradient(135deg,var(--accent2) 0%,var(--accent3) 50%,#A5F3FC 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.15rem;color:var(--text2);max-width:640px;margin:0 auto 3rem;line-height:1.75}
+.metrics{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin-bottom:3rem}
+.mchip{padding:10px 20px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:.88rem;color:var(--text2);display:flex;align-items:center;gap:8px}
+.mchip strong{color:var(--text);font-size:1.1rem;font-weight:700}
+.mdot{width:6px;height:6px;border-radius:50%}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:600;font-size:.95rem;transition:all .2s;box-shadow:0 4px 20px rgba(99,102,241,.4)}
+.cta:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,.5)}
 
-/* PAGE */
-.page{max-width:1100px;margin:0 auto;padding:0 24px 120px}
-section{margin-top:80px;scroll-margin-top:68px}
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
-.section-title{font-size:clamp(22px,3vw,30px);font-weight:800;color:var(--white);letter-spacing:-.02em;margin-bottom:8px;line-height:1.2}
-.section-sub{font-size:14px;color:var(--text-muted);max-width:620px;line-height:1.7;margin-bottom:32px}
-
-/* CARD BASE */
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
-.card2{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px 22px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-@media(max-width:768px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
-@media(max-width:960px){.grid3{grid-template-columns:1fr 1fr}.grid4{grid-template-columns:1fr 1fr}}
-
-/* KPI cards */
-.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;transition:border-color .2s}
-.kpi-card:hover{border-color:var(--border2)}
-.kpi-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.kpi-value{font-size:30px;font-weight:900;color:var(--white);letter-spacing:-.02em;line-height:1}
-.kpi-sub{font-size:12px;color:var(--text-muted);margin-top:6px}
-
-/* BADGE */
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px}
-.badge-green{background:var(--green-10);color:var(--green)}
-.badge-primary{background:var(--primary-10);color:var(--primary)}
-.badge-amber{background:var(--amber-10);color:var(--amber)}
-.badge-cyan{background:var(--cyan-10);color:var(--cyan)}
-.badge-dim{background:rgba(255,255,255,0.06);color:var(--text-dim)}
-
-/* AGENT ARCHITECTURE */
-.arch-container{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;overflow:hidden}
-.arch-center{text-align:center;margin-bottom:32px}
-.arch-ceo{display:inline-flex;flex-direction:column;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(139,92,246,.2));border:2px solid rgba(99,102,241,.5);border-radius:16px;padding:16px 28px;position:relative}
-.arch-ceo::before{content:'CEO';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:6px;letter-spacing:.1em}
-.arch-ceo-name{font-size:15px;font-weight:800;color:var(--white)}
-.arch-ceo-desc{font-size:11px;color:var(--text-muted)}
-
-.arch-agents{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.arch-agent{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;text-align:center;flex:1;min-width:120px;max-width:160px;position:relative;transition:all .2s}
-.arch-agent:hover{border-color:var(--border2);transform:translateY(-2px)}
-.arch-agent-icon{font-size:20px;margin-bottom:6px;display:block}
-.arch-agent-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:2px}
-.arch-agent-desc{font-size:10px;color:var(--text-muted)}
-
-.arch-infra{margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media(max-width:640px){.arch-infra{grid-template-columns:1fr 1fr}}
-.arch-infra-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px}
-.arch-infra-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.arch-infra-text{font-size:12px;color:var(--text-dim)}
-.arch-infra-label{font-size:11px;font-weight:700;color:var(--text);display:block}
-
-/* FLOW DIAGRAM */
-.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:24px 0}
-.flow-step{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;flex:1;min-width:140px;position:relative;transition:all .2s}
-.flow-step:hover{border-color:var(--primary-20)}
-.flow-step-num{font-size:10px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.flow-step-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
-.flow-step-desc{font-size:11px;color:var(--text-muted);line-height:1.5}
-.flow-arrow{display:flex;align-items:center;padding:0 8px;color:var(--text-muted);font-size:18px;flex-shrink:0;align-self:center}
-@media(max-width:640px){.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg);padding:4px 0}}
-
-/* CODE BLOCK */
-.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;font-family:var(--mono);font-size:12px;line-height:1.8;overflow-x:auto;position:relative}
-.code-block::before{content:attr(data-lang);position:absolute;top:10px;right:14px;font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase}
-.code-comment{color:var(--text-muted)}
-.code-key{color:var(--cyan)}
-.code-val{color:var(--green)}
-.code-str{color:#F9A8D4}
-.code-num{color:var(--amber)}
-.code-kw{color:var(--primary);font-weight:700}
-
-/* TIMELINE */
-.timeline{position:relative;padding-left:36px}
-.timeline::before{content:'';position:absolute;left:14px;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,var(--primary),rgba(99,102,241,.1))}
-.tl-item{position:relative;margin-bottom:28px}
-.tl-item:last-child{margin-bottom:0}
-.tl-dot{position:absolute;left:-28px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--primary);border:3px solid var(--bg);box-shadow:0 0 0 2px var(--primary-20)}
-.tl-date{font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
-.tl-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
-.tl-body{font-size:13px;color:var(--text-dim);line-height:1.6}
-
-/* OUTPUT CARDS */
-.output-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .2s;cursor:default}
-.output-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.output-icon{font-size:24px;margin-bottom:10px}
-.output-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px}
-.output-meta{font-size:11px;color:var(--text-muted);margin-bottom:12px}
-.output-tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--primary-10);color:var(--primary);text-transform:uppercase;letter-spacing:.06em;margin-right:4px;margin-bottom:4px}
+/* SECTION HEADERS */
+.slabel{font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);margin-bottom:.75rem}
+h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:1rem}
+.ssub{font-size:1.05rem;color:var(--text2);max-width:600px;margin-bottom:3rem;line-height:1.7}
 
 /* DIVIDER */
-.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+hr{border:none;border-top:1px solid var(--border)}
 
-/* HIGHLIGHT BOX */
-.highlight{background:var(--primary-10);border:1px solid rgba(99,102,241,.25);border-radius:12px;padding:20px 24px}
-.highlight-title{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:6px}
-.success-box{background:var(--green-10);border:1px solid rgba(16,185,129,.25);border-radius:12px;padding:20px 24px}
-.success-title{font-size:14px;font-weight:700;color:var(--green);margin-bottom:6px}
-.info-row{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-dim);line-height:1.6}
-.info-row+.info-row{margin-top:8px}
-.info-check{color:var(--green);flex-shrink:0;font-size:14px;margin-top:1px}
+/* ARCH DIAGRAM */
+#architecture{background:var(--bg2)}
+.arch-box{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2.5rem;margin-bottom:3rem;overflow-x:auto}
+.arch-svg-wrap{min-width:600px}
+.arch-svg{width:100%;max-width:900px;margin:0 auto;display:block}
 
-/* TABLE */
-.table-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{background:var(--card2);color:var(--text-dim);padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
-tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
-tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:var(--bg2)}
-tbody td{padding:11px 14px;color:var(--text)}
-.td-mono{font-family:var(--mono);font-size:11px}
-.td-green{color:var(--green);font-weight:700}
-.td-amber{color:var(--amber);font-weight:700}
-.td-dim{color:var(--text-muted);font-size:12px}
+/* FLOW */
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:1.5rem 0;margin:2rem 0}
+.fstep{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1rem;text-align:center}
+.farrow{display:flex;align-items:center;padding:0 8px;color:var(--accent2);font-size:1.2rem;flex-shrink:0;opacity:.6}
+.fnum{width:28px;height:28px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;margin:0 auto .6rem}
+.ftit{font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:.3rem}
+.fdesc{font-size:.7rem;color:var(--text3);line-height:1.4}
+
+/* AGENTS GRID */
+.agents{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem}
+.acard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all .25s;position:relative;overflow:hidden}
+.acard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:0;transition:opacity .25s}
+.acard:hover{background:var(--card-hover);border-color:rgba(99,102,241,.3)}
+.acard:hover::before{opacity:1}
+.aico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:.75rem}
+.aname{font-weight:700;font-size:.9rem;margin-bottom:.25rem}
+.adesc{font-size:.78rem;color:var(--text3);line-height:1.5}
+
+/* PIPELINE */
+#career-ops{background:var(--bg)}
+.pipeline{display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:14px;overflow:hidden;border:1px solid var(--border);margin-bottom:2rem}
+.prow{display:grid;grid-template-columns:36px 150px 1fr 110px;gap:1rem;background:var(--bg3);padding:1rem 1.25rem;align-items:center;transition:background .2s}
+.prow:hover{background:var(--card-hover)}
+.prow.hdr{background:var(--bg2);border-bottom:1px solid var(--border);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);cursor:default}
+.prow.hdr:hover{background:var(--bg2)}
+.snum{width:28px;height:28px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent2)}
+.sstage{font-size:.84rem;font-weight:600}
+.sdet{font-size:.78rem;color:var(--text2)}
+.sbadge{font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:20px;text-align:center;width:fit-content;margin-left:auto}
+.b-auto{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.b-llm{background:rgba(99,102,241,.15);color:var(--accent2);border:1px solid rgba(99,102,241,.3)}
+.b-api{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
+@media(max-width:768px){.prow{grid-template-columns:30px 1fr}.prow.hdr{display:none}.sdet,.sbadge{display:none}}
+
+/* EMAIL */
+.email{background:var(--bg3);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:2rem}
+.email-hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.email-meta{font-size:.83rem;color:var(--text2)}
+.email-meta strong{color:var(--text)}
+.email-badge{font-size:.73rem;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.email-body{padding:1.5rem;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.9;color:var(--text2)}
+.hl{color:var(--accent3)}.em{color:var(--green)}
+
+/* RESULTS */
+.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem}
+.rcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+.rco{font-weight:700;font-size:.9rem;margin-bottom:.25rem}
+.rdet{font-size:.76rem;color:var(--text3);margin-bottom:.5rem}
+.rst{font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block}
+.s-warm{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
+.s-done{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.s-sent{background:rgba(99,102,241,.15);color:var(--accent2);border:1px solid rgba(99,102,241,.3)}
+
+/* CALLOUT */
+.callout{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-left:3px solid var(--accent);border-radius:8px;padding:1rem 1.25rem;font-size:.87rem;color:var(--text2);line-height:1.7;margin:1.5rem 0}
+.callout strong{color:var(--accent3)}
+
+/* PULSO */
+#pulso{background:var(--bg2)}
+.timeline{display:flex;flex-direction:column;position:relative;padding-left:2rem;margin-bottom:3rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),transparent)}
+.titem{position:relative;padding:0 0 2rem 1.5rem}
+.tdot{position:absolute;left:-2.3rem;top:.2rem;width:14px;height:14px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 4px rgba(99,102,241,.2)}
+.tweek{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:.4rem}
+.ttit{font-weight:700;font-size:1rem;margin-bottom:.4rem}
+.tchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:.5rem}
+.chip{font-size:.7rem;font-weight:500;padding:3px 10px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--text2)}
+
+/* DELIVERABLES */
+.delivs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+.deliv{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start;transition:all .2s}
+.deliv:hover{background:var(--card-hover);border-color:rgba(99,102,241,.2)}
+.dico{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.dname{font-weight:600;font-size:.87rem;margin-bottom:.2rem}
+.ddet{font-size:.74rem;color:var(--text3)}
+
+/* TERMINAL */
+.term{background:#0A0E17;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.term-hdr{background:rgba(255,255,255,.05);padding:.6rem 1rem;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.08)}
+.td{width:10px;height:10px;border-radius:50%}
+.td-r{background:#FF5F57}.td-y{background:#FFBD2E}.td-g{background:#28C840}
+.term-lbl{font-size:.7rem;color:var(--text3);margin-left:.5rem;font-family:monospace}
+.term-body{padding:1.25rem 1.5rem;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.9;color:#E2E8F0}
+.tg{color:#28C840}.ty{color:#FFBD2E}.tb{color:#89B4FA}.tgr{color:#64748B}.tp{color:#4ADE80}
+
+/* OUTPUTS */
+#outputs{background:var(--bg)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:3rem}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;text-align:center;transition:all .25s;position:relative;overflow:hidden}
+.scard:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.3)}
+.scard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .25s}
+.scard:hover::after{opacity:1}
+.snum{font-size:2.5rem;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:.4rem}
+.slbl{font-size:.78rem;color:var(--text3);font-weight:500}
+.ocols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+.ocol{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.ocol-hdr{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.ocol-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ocol-t{font-weight:700;font-size:.9rem}
+.ocol-c{font-size:.73rem;color:var(--text3);margin-top:2px}
+.oitem{display:flex;align-items:center;gap:8px;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.78rem;color:var(--text2)}
+.oitem:last-child{border-bottom:none}
+.ocheck{color:var(--green);flex-shrink:0}
+
+/* DEEPLINE */
+#deepline{background:var(--bg2)}
+.intbox{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem;overflow-x:auto}
+.intflow{display:flex;align-items:center;gap:.75rem;min-width:700px;justify-content:center}
+.inode{text-align:center;flex:1}
+.ibox{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;margin-bottom:.4rem}
+.ibox.dl{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.1);box-shadow:0 0 20px rgba(99,102,241,.15)}
+.iico{font-size:1.4rem;margin-bottom:4px}
+.iname{font-size:.76rem;font-weight:700}
+.idet{font-size:.66rem;color:var(--text3);margin-top:2px}
+.iarrow{color:var(--accent2);font-size:1.5rem;opacity:.6;flex-shrink:0}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
+@media(max-width:600px){.ba{grid-template-columns:1fr}}
+.bcard{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+.bcard.after{border-color:rgba(16,185,129,.3)}
+.bh{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.bh.bef{color:var(--text3)}.bh.aft{color:var(--green)}
+.bmet{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.04)}
+.bmet:last-child{border-bottom:none}
+.bml{color:var(--text2)}.bmv{font-weight:700}
+.good{color:var(--green)}.bad{color:var(--text3)}
+@media(max-width:480px){.intflow{flex-direction:column;min-width:auto}.iarrow{transform:rotate(90deg)}}
 
 /* FOOTER */
-.footer{max-width:1100px;margin:0 auto;padding:40px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;gap:16px}
-.footer-left{font-size:13px;color:var(--text-muted)}
-.footer-right{font-size:12px;color:var(--text-muted);font-family:var(--mono)}
+footer{background:var(--bg);border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
+.flogo{font-size:1.2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.75rem}
+.fsub{font-size:.84rem;color:var(--text3);margin-bottom:1.5rem}
+.flinks{display:flex;justify-content:center;gap:2rem;list-style:none;flex-wrap:wrap}
+.flinks a{font-size:.8rem;color:var(--text3);text-decoration:none;transition:color .2s}
+.flinks a:hover{color:var(--accent2)}
 
-/* SCROLL INDICATOR */
-.scroll-line{position:fixed;top:52px;left:0;height:2px;background:var(--primary-g);z-index:99;transition:width .1s}
+/* REVEAL */
+.rev{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rev.vis{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
-/* ANIMATION */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.fade-up{animation:fadeUp .5s ease forwards}
-
-/* RESPONSIVE */
-@media(max-width:640px){
-  .hero{padding:100px 16px 60px}
-  .page{padding:0 16px 80px}
-  .arch-agents .arch-agent{min-width:100px}
-  .arch-infra{grid-template-columns:1fr 1fr}
-  nav{padding:0 16px}
-  .nav-inner{gap:16px}
-  .hero-stats{gap:28px}
+@media(max-width:768px){
+  section{padding:4rem 1.25rem}
+  .flow{flex-direction:column;gap:.5rem}
+  .farrow{transform:rotate(90deg);margin:-0.5rem auto}
+  h1{font-size:2.2rem}h2{font-size:1.8rem}
+}
+@media(max-width:480px){
+  .metrics{flex-direction:column;align-items:center}
 }
 </style>
 </head>
 <body>
 
-<!-- SCROLL PROGRESS -->
-<div class="scroll-line" id="scrollLine"></div>
-
-<!-- NAV -->
 <nav>
-  <div class="nav-inner">
-    <a class="nav-logo" href="#">
-      <div class="nav-logo-dot"></div>
-      Paperclip
-    </a>
-    <div class="nav-links" id="navLinks">
-      <button class="nav-link active" onclick="scrollToSection('architecture')">Architecture</button>
-      <button class="nav-link" onclick="scrollToSection('careerops')">Career-Ops</button>
-      <button class="nav-link" onclick="scrollToSection('pulso')">Pulso</button>
-      <button class="nav-link" onclick="scrollToSection('outputs')">Outputs</button>
-      <button class="nav-link" onclick="scrollToSection('code')">Code</button>
-      <button class="nav-link" onclick="scrollToSection('deepline')">Deepline Fit</button>
-    </div>
-  </div>
+  <div class="nav-logo"><span class="nav-dot"></span>Paperclip</div>
+  <ul class="nav-links">
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#career-ops">Career-Ops</a></li>
+    <li><a href="#pulso">Pulso</a></li>
+    <li><a href="#outputs">Outputs</a></li>
+    <li><a href="#deepline">Deepline</a></li>
+  </ul>
+  <span class="nav-badge">Showcase · Apr 2026</span>
 </nav>
 
 <!-- HERO -->
-<div class="hero fade-up">
-  <div class="hero-badge">
-    <span class="hero-badge-dot"></span>
-    Production Multi-Agent Platform
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Agentic Workflows · Multi-Agent Orchestration</div>
+    <h1>The Next Generation<br>of <span class="grad">GTM Automation</span></h1>
+    <p class="hero-sub">We built a multi-agent system that autonomously handles GTM workflows end-to-end — from lead prospecting to client delivery. Zero overhead. Real output.</p>
+    <div class="metrics">
+      <div class="mchip"><span class="mdot" style="background:var(--accent);box-shadow:0 0 6px var(--accent)"></span><strong>10</strong> agents</div>
+      <div class="mchip"><span class="mdot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></span><strong>200+</strong> leads processed</div>
+      <div class="mchip"><span class="mdot" style="background:var(--yellow);box-shadow:0 0 6px var(--yellow)"></span><strong>25%</strong> response rate</div>
+      <div class="mchip"><span class="mdot" style="background:var(--accent2);box-shadow:0 0 6px var(--accent2)"></span><strong>40+</strong> deliverables</div>
+      <div class="mchip"><span class="mdot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></span><strong>3</strong> sites live</div>
+    </div>
+    <a href="#architecture" class="cta">Explore Workflows <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg></a>
   </div>
-  <h1 class="hero-title">Agentic Workflows<br><span>That Actually Ship</span></h1>
-  <p class="hero-sub">Paperclip orchestrates specialized AI agents across real client work — from automated prospecting to full client delivery pipelines. Everything shown here is real and in production.</p>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-value">10</div>
-      <div class="hero-stat-label">Specialized Agents</div>
+</section>
+
+<hr>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <p class="slabel rev">01 · Architecture</p>
+    <h2 class="rev">How 10 Agents<br><span class="grad">Coordinate Without Slack</span></h2>
+    <p class="ssub rev">Paperclip is our internal orchestration layer. Every agent has a role, tools, and a heartbeat — it autonomously checks for tasks, executes, and reports. No standups. No Slack threads.</p>
+
+    <div class="arch-box rev">
+      <div class="arch-svg-wrap">
+        <svg class="arch-svg" viewBox="0 0 860 380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="rgba(255,255,255,.03)" stroke-width="1"/></pattern>
+            <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <rect width="860" height="380" fill="url(#g)"/>
+
+          <!-- CEO -->
+          <rect x="290" y="20" width="280" height="70" rx="10" fill="rgba(99,102,241,.15)" stroke="#6366F1" stroke-width="1.5"/>
+          <rect x="290" y="20" width="280" height="3" rx="2" fill="#6366F1"/>
+          <text x="430" y="48" text-anchor="middle" fill="#C7D2FE" font-size="13" font-weight="700" font-family="system-ui, sans-serif">&#x1F451; CEO Agent</text>
+          <text x="430" y="67" text-anchor="middle" fill="#64748B" font-size="10" font-family="system-ui, sans-serif">Coordinates · Creates subtasks · Monitors heartbeat</text>
+
+          <!-- Delegation arrows -->
+          <line x1="360" y1="90" x2="119" y2="175" stroke="rgba(99,102,241,.4)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="395" y1="90" x2="269" y2="175" stroke="rgba(99,102,241,.4)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="430" y1="90" x2="430" y2="175" stroke="rgba(99,102,241,.6)" stroke-width="2" stroke-dasharray="4,3"/>
+          <line x1="465" y1="90" x2="590" y2="175" stroke="rgba(99,102,241,.4)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="500" y1="90" x2="742" y2="175" stroke="rgba(99,102,241,.4)" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+          <!-- Trading Strategist -->
+          <rect x="45" y="175" width="148" height="65" rx="8" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.3)" stroke-width="1"/>
+          <text x="119" y="198" text-anchor="middle" fill="#FCD34D" font-size="11" font-weight="700" font-family="system-ui, sans-serif">&#x1F4C8; Trading Strategist</text>
+          <text x="119" y="214" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">Polymarket · Signals</text>
+          <text x="119" y="228" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">Strategy generation</text>
+
+          <!-- Sales Strategist -->
+          <rect x="195" y="175" width="148" height="65" rx="8" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.3)" stroke-width="1"/>
+          <text x="269" y="198" text-anchor="middle" fill="#6EE7B7" font-size="11" font-weight="700" font-family="system-ui, sans-serif">&#x1F4BC; Sales Strategist</text>
+          <text x="269" y="214" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">Pipeline management</text>
+          <text x="269" y="228" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">Pitch materials</text>
+
+          <!-- Web Builder (highlighted) -->
+          <rect x="354" y="175" width="148" height="65" rx="8" fill="rgba(99,102,241,.12)" stroke="rgba(99,102,241,.5)" stroke-width="1.5"/>
+          <text x="428" y="198" text-anchor="middle" fill="#A5B4FC" font-size="11" font-weight="700" font-family="system-ui, sans-serif">&#x1F310; Web Builder</text>
+          <text x="428" y="214" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">LPs · Sites · Deploy</text>
+          <text x="428" y="228" text-anchor="middle" fill="#6366F1" font-size="9" font-family="system-ui, sans-serif">&#x2736; you are here</text>
+
+          <!-- Content Creator -->
+          <rect x="516" y="175" width="148" height="65" rx="8" fill="rgba(236,72,153,.08)" stroke="rgba(236,72,153,.3)" stroke-width="1"/>
+          <text x="590" y="198" text-anchor="middle" fill="#F9A8D4" font-size="11" font-weight="700" font-family="system-ui, sans-serif">&#x270D;&#xFE0F; Content Creator</text>
+          <text x="590" y="214" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">Playbooks · Copy</text>
+          <text x="590" y="228" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">Editorial calendars</text>
+
+          <!-- Growth Hacker -->
+          <rect x="668" y="175" width="148" height="65" rx="8" fill="rgba(16,185,129,.07)" stroke="rgba(16,185,129,.25)" stroke-width="1"/>
+          <text x="742" y="198" text-anchor="middle" fill="#6EE7B7" font-size="11" font-weight="700" font-family="system-ui, sans-serif">&#x1F680; Growth Hacker</text>
+          <text x="742" y="214" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">Acquisition · A/B</text>
+          <text x="742" y="228" text-anchor="middle" fill="#64748B" font-size="9" font-family="system-ui, sans-serif">New channels</text>
+
+          <!-- Row 2 connectors -->
+          <line x1="119" y1="240" x2="119" y2="290" stroke="rgba(99,102,241,.25)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="269" y1="240" x2="269" y2="290" stroke="rgba(99,102,241,.25)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="428" y1="240" x2="428" y2="290" stroke="rgba(99,102,241,.25)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="590" y1="240" x2="590" y2="290" stroke="rgba(99,102,241,.25)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="742" y1="240" x2="742" y2="290" stroke="rgba(99,102,241,.25)" stroke-width="1" stroke-dasharray="3,3"/>
+
+          <!-- Row 2 agents -->
+          <rect x="55" y="290" width="126" height="52" rx="6" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <text x="118" y="313" text-anchor="middle" fill="#94A3B8" font-size="10" font-weight="600" font-family="system-ui, sans-serif">Trading Engineer</text>
+          <text x="118" y="329" text-anchor="middle" fill="#475569" font-size="9" font-family="system-ui, sans-serif">Bot execution</text>
+
+          <rect x="200" y="290" width="136" height="52" rx="6" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <text x="268" y="313" text-anchor="middle" fill="#94A3B8" font-size="10" font-weight="600" font-family="system-ui, sans-serif">CMO</text>
+          <text x="268" y="329" text-anchor="middle" fill="#475569" font-size="9" font-family="system-ui, sans-serif">Campaigns · Analytics</text>
+
+          <rect x="358" y="290" width="140" height="52" rx="6" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <text x="428" y="313" text-anchor="middle" fill="#94A3B8" font-size="10" font-weight="600" font-family="system-ui, sans-serif">Designer</text>
+          <text x="428" y="329" text-anchor="middle" fill="#475569" font-size="9" font-family="system-ui, sans-serif">Logos · Branding</text>
+
+          <rect x="518" y="290" width="143" height="52" rx="6" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <text x="589" y="313" text-anchor="middle" fill="#94A3B8" font-size="10" font-weight="600" font-family="system-ui, sans-serif">Founding Engineer</text>
+          <text x="589" y="329" text-anchor="middle" fill="#475569" font-size="9" font-family="system-ui, sans-serif">APIs · Backend</text>
+
+          <rect x="669" y="290" width="143" height="52" rx="6" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <text x="740" y="313" text-anchor="middle" fill="#94A3B8" font-size="10" font-weight="600" font-family="system-ui, sans-serif">Creative Director</text>
+          <text x="740" y="329" text-anchor="middle" fill="#475569" font-size="9" font-family="system-ui, sans-serif">Visual direction</text>
+
+          <!-- Live badge -->
+          <circle cx="828" cy="32" r="6" fill="#10B981" filter="url(#glow)">
+            <animate attributeName="opacity" values="1;.3;1" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="840" y="36" fill="#10B981" font-size="9" font-family="system-ui, sans-serif" font-weight="700">LIVE</text>
+        </svg>
+      </div>
     </div>
-    <div class="hero-stat">
-      <div class="hero-stat-value">300+</div>
-      <div class="hero-stat-label">Tasks Completed</div>
+
+    <!-- Heartbeat flow -->
+    <p class="slabel rev" style="margin-top:3rem">Heartbeat System — Every 30 Minutes</p>
+    <div class="flow rev">
+      <div class="fstep"><div class="fnum">1</div><div class="ftit">Wake</div><div class="fdesc">Agent activates on schedule</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="fnum">2</div><div class="ftit">Scan</div><div class="fdesc">Check "todo" assigned tasks</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="fnum">3</div><div class="ftit">Checkout</div><div class="fdesc">Lock task → in_progress</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="fnum">4</div><div class="ftit">Execute</div><div class="fdesc">Work with specialized tools</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="fnum">5</div><div class="ftit">Deliver</div><div class="fdesc">Post result, notify CEO</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="fnum">6</div><div class="ftit">Sleep</div><div class="fdesc">Wait for next cycle</div></div>
     </div>
-    <div class="hero-stat">
-      <div class="hero-stat-value">24/7</div>
-      <div class="hero-stat-label">Autonomous Operation</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-value">3</div>
-      <div class="hero-stat-label">Live Client Workflows</div>
+
+    <!-- Agent cards -->
+    <div class="agents">
+      <div class="acard rev d1"><div class="aico" style="background:rgba(99,102,241,.15)">&#x1F451;</div><div class="aname">CEO</div><div class="adesc">Coordinates all agents, creates subtasks from board requests, monitors progress</div></div>
+      <div class="acard rev d2"><div class="aico" style="background:rgba(245,158,11,.15)">&#x1F4C8;</div><div class="aname">Trading Strategist</div><div class="adesc">Scans Polymarket, generates signals, manages positions and strategy</div></div>
+      <div class="acard rev d3"><div class="aico" style="background:rgba(16,185,129,.15)">&#x1F4BC;</div><div class="aname">Sales Strategist</div><div class="adesc">Pipeline management, pitch prep, cold email coordination</div></div>
+      <div class="acard rev d4"><div class="aico" style="background:rgba(99,102,241,.15)">&#x1F310;</div><div class="aname">Web Builder</div><div class="adesc">Builds landing pages, sites, deploys to Vercel &amp; GitHub Pages</div></div>
+      <div class="acard rev d1"><div class="aico" style="background:rgba(236,72,153,.15)">&#x270D;&#xFE0F;</div><div class="aname">Content Creator</div><div class="adesc">Playbooks, copy, scripts, editorial calendars, showcase docs</div></div>
+      <div class="acard rev d2"><div class="aico" style="background:rgba(16,185,129,.15)">&#x1F680;</div><div class="aname">Growth Hacker</div><div class="adesc">Acquisition experiments, A/B testing, channel expansion</div></div>
+      <div class="acard rev d3"><div class="aico" style="background:rgba(251,191,36,.15)">&#x1F3A8;</div><div class="aname">Designer</div><div class="adesc">Logos, brand systems, social templates — 42 Florizz variations</div></div>
+      <div class="acard rev d4"><div class="aico" style="background:rgba(167,139,250,.15)">&#x2699;&#xFE0F;</div><div class="aname">Founding Engineer</div><div class="adesc">APIs, n8n automations, backend integrations, rapid MVPs</div></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- PAGE CONTENT -->
-<div class="page">
+<hr>
 
-  <!-- ARCHITECTURE -->
-  <section id="architecture">
-    <div class="eyebrow">Platform Architecture</div>
-    <h2 class="section-title">How Paperclip Orchestrates Agents</h2>
-    <p class="section-sub">A production multi-agent system where a CEO agent delegates work to specialized sub-agents, each with their own tools, skills, and domain expertise. Agents coordinate via a shared control plane API.</p>
+<!-- CAREER OPS -->
+<section id="career-ops">
+  <div class="container">
+    <p class="slabel rev">02 · Case Study</p>
+    <h2 class="rev">Career-Ops:<br><span class="grad">Automated Prospecting E2E</span></h2>
+    <p class="ssub rev">We built a fully automated job prospecting pipeline — scanning platforms, scoring opportunities, writing personalized cold emails, and tracking responses. Zero human steps.</p>
 
-    <div class="arch-container">
-      <div class="arch-center">
-        <div class="arch-ceo">
-          <div class="arch-ceo-name">🧠 CEO Agent</div>
-          <div class="arch-ceo-desc">Strategic orchestration · Task delegation · Cross-agent coordination</div>
-        </div>
-        <div style="margin:16px 0;font-size:20px;color:var(--text-muted)">↕</div>
-        <div class="arch-agents">
-          <div class="arch-agent">
-            <span class="arch-agent-icon">🔬</span>
-            <div class="arch-agent-name">Founding Engineer</div>
-            <div class="arch-agent-desc">Infrastructure · APIs · Integrations</div>
-          </div>
-          <div class="arch-agent">
-            <span class="arch-agent-icon">🌐</span>
-            <div class="arch-agent-name">Web Builder</div>
-            <div class="arch-agent-desc">React · TypeScript · Deploy</div>
-          </div>
-          <div class="arch-agent">
-            <span class="arch-agent-icon">✍️</span>
-            <div class="arch-agent-name">Content Creator</div>
-            <div class="arch-agent-desc">Copy · Docs · Narratives</div>
-          </div>
-          <div class="arch-agent">
-            <span class="arch-agent-icon">🎨</span>
-            <div class="arch-agent-name">Designer</div>
-            <div class="arch-agent-desc">Brand · UI · Visual identity</div>
-          </div>
-          <div class="arch-agent">
-            <span class="arch-agent-icon">📈</span>
-            <div class="arch-agent-name">Sales Strategist</div>
-            <div class="arch-agent-desc">Outreach · Pipeline · CRM</div>
-          </div>
-          <div class="arch-agent">
-            <span class="arch-agent-icon">📣</span>
-            <div class="arch-agent-name">Growth Hacker</div>
-            <div class="arch-agent-desc">Acquisition · Campaigns</div>
-          </div>
-          <div class="arch-agent">
-            <span class="arch-agent-icon">📊</span>
-            <div class="arch-agent-name">Trading Strategist</div>
-            <div class="arch-agent-desc">Markets · Signals · Backtest</div>
-          </div>
-          <div class="arch-agent">
-            <span class="arch-agent-icon">⚡</span>
-            <div class="arch-agent-name">CMO</div>
-            <div class="arch-agent-desc">Brand strategy · Marketing</div>
-          </div>
-        </div>
+    <div class="pipeline rev">
+      <div class="prow hdr"><span>#</span><span>Stage</span><span>What happens</span><span>Method</span></div>
+      <div class="prow"><div class="snum">1</div><div class="sstage">&#x1F50D; Scan</div><div class="sdet">HN Who's Hiring, Upwork, aitmpl.com, LinkedIn — 200+ listings ingested automatically</div><div class="sbadge b-auto">Automated</div></div>
+      <div class="prow"><div class="snum">2</div><div class="sstage">&#x1F9E0; Score</div><div class="sdet">LLM evaluates each listing: Claude Code fit, remote-friendly, no-video, pay range, culture</div><div class="sbadge b-llm">LLM Eval</div></div>
+      <div class="prow"><div class="snum">3</div><div class="sstage">&#x1F50E; Research</div><div class="sdet">Scrape website + LinkedIn, identify decision-maker, find personalization angle</div><div class="sbadge b-auto">Automated</div></div>
+      <div class="prow"><div class="snum">4</div><div class="sstage">&#x270F;&#xFE0F; Draft</div><div class="sdet">Generate personalized email using company hooks + our workflow evidence as proof</div><div class="sbadge b-llm">LLM Gen</div></div>
+      <div class="prow"><div class="snum">5</div><div class="sstage">&#x1F4E8; Send</div><div class="sdet">Deliver via Evolution API (WhatsApp/Email) with open/click pixel tracking built-in</div><div class="sbadge b-api">Evolution API</div></div>
+      <div class="prow"><div class="snum">6</div><div class="sstage">&#x1F4CA; Track</div><div class="sdet">Monitor opens, clicks, replies — pipeline status updated in Paperclip automatically</div><div class="sbadge b-auto">Automated</div></div>
+      <div class="prow"><div class="snum">7</div><div class="sstage">&#x1F501; Follow-up</div><div class="sdet">Auto follow-up sequence at +3 and +7 days for non-responders</div><div class="sbadge b-auto">Automated</div></div>
+    </div>
+
+    <p class="slabel rev" style="margin-bottom:.75rem">Real Email Sent — Deepline (NYC, Series A)</p>
+    <div class="email rev">
+      <div class="email-hdr">
+        <div class="email-meta"><strong>To:</strong> Safiyy (Co-founder, Deepline) &nbsp;·&nbsp; <strong>Subject:</strong> Claude Code multi-agent workflows (building Deepline's GTM?)</div>
+        <span class="email-badge">&#x2713; Replied</span>
       </div>
-
-      <div class="arch-infra">
-        <div class="arch-infra-item">
-          <div class="arch-infra-dot" style="background:var(--primary)"></div>
-          <div>
-            <span class="arch-infra-label">Control Plane API</span>
-            <span class="arch-infra-text">Issue tracking, task delegation, status management via REST</span>
-          </div>
-        </div>
-        <div class="arch-infra-item">
-          <div class="arch-infra-dot" style="background:var(--green)"></div>
-          <div>
-            <span class="arch-infra-label">Heartbeat Monitoring</span>
-            <span class="arch-infra-text">Agents wake on @mention or scheduled triggers, post results</span>
-          </div>
-        </div>
-        <div class="arch-infra-item">
-          <div class="arch-infra-dot" style="background:var(--cyan)"></div>
-          <div>
-            <span class="arch-infra-label">Skill System</span>
-            <span class="arch-infra-text">Domain-specific playbooks loaded per task context</span>
-          </div>
-        </div>
-        <div class="arch-infra-item">
-          <div class="arch-infra-dot" style="background:var(--amber)"></div>
-          <div>
-            <span class="arch-infra-label">MCP Tool Layer</span>
-            <span class="arch-infra-text">Browser automation, Git, file system, external APIs</span>
-          </div>
-        </div>
-        <div class="arch-infra-item">
-          <div class="arch-infra-dot" style="background:#F9A8D4"></div>
-          <div>
-            <span class="arch-infra-label">Claude Code Runtime</span>
-            <span class="arch-infra-text">Each agent runs as an isolated Claude Code process</span>
-          </div>
-        </div>
-        <div class="arch-infra-item">
-          <div class="arch-infra-dot" style="background:var(--red)"></div>
-          <div>
-            <span class="arch-infra-label">Memory &amp; Context</span>
-            <span class="arch-infra-text">PARA-method memory, persistent project files, CLAUDE.md</span>
-          </div>
-        </div>
+      <div class="email-body">
+<span class="tgr">Hi Safiyy,</span><br><br>
+I saw you're hiring for <span class="hl">Founding Full-Stack Engineer</span> at Deepline. Interesting timing —<br>
+we've been building <span class="em">multi-agent orchestration patterns</span> similar to what GTM tools need.<br><br>
+Specifically:<br>
+<span class="hl">·</span> 10 autonomous agents coordinating via task delegation — CEO orchestrates, no overhead<br>
+<span class="hl">·</span> Heartbeat system — agents wake every 30 min, check tasks, deliver, sleep<br>
+<span class="hl">·</span> Real outputs: <span class="em">40+ docs, 12 playbooks, 3 deployed sites, 200+ leads processed</span><br><br>
+I've shipped production Claude Code integrations and I'm curious about Deepline's architecture.<br>
+Open to exploring how our workflows could inform your product direction.<br><br>
+<span class="tgr">Free time this week for a quick call?</span><br><br>
+---<br>
+<span class="tb">GitHub:</span> [portfolio] &nbsp; <span class="tb">Showcase:</span> [this page]
       </div>
     </div>
 
-    <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
-      <div class="kpi-card">
-        <div class="kpi-label">Agent Specialization</div>
-        <div class="kpi-value">10</div>
-        <div class="kpi-sub">Each agent: dedicated system prompt, tools, skills, and memory</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Task Coordination</div>
-        <div class="kpi-value">REST API</div>
-        <div class="kpi-sub">Issues, comments, checkout/checkin, status transitions, @mentions</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Autonomy Level</div>
-        <div class="kpi-value">L3</div>
-        <div class="kpi-sub">Plans, executes, coordinates across agents — reports to human board</div>
-      </div>
+    <div class="callout rev">
+      <strong>Result:</strong> Safiyy replied within 6 days. Call completed April 24 — Deepline offered free API credits to test integration. Phase 2 scheduled.
     </div>
-  </section>
 
-  <!-- CAREER-OPS -->
-  <section id="careerops">
-    <div class="eyebrow">Case Study 01</div>
-    <h2 class="section-title">Career-Ops — Automated Prospecting Pipeline</h2>
-    <p class="section-sub">An end-to-end autonomous job search and outreach pipeline. Agents scan platforms, score opportunities, write personalized cold emails, track follow-ups, and manage the entire funnel — without human intervention at each step.</p>
+    <p class="slabel rev" style="margin-top:2.5rem">Pipeline Results · April 2026</p>
+    <div class="results rev">
+      <div class="rcard"><div class="rco">&#x1F535; Deepline</div><div class="rdet">NYC · GTM Automation · Series A</div><span class="rst s-warm">&#x1F525; WARM — Call done</span></div>
+      <div class="rcard"><div class="rco">&#x1F7E2; Confluence Research</div><div class="rdet">Research Consultant · $100-300/h</div><span class="rst s-done">&#x2713; Call confirmed</span></div>
+      <div class="rcard"><div class="rco">&#x1F7E1; Zed Industries</div><div class="rdet">Editor tooling · Remote</div><span class="rst s-sent">&#x2192; Applied via Ashby</span></div>
+      <div class="rcard"><div class="rco">&#x1F7E1; Oneleet</div><div class="rdet">Security automation · Remote</div><span class="rst s-sent">&#x2192; Receipt confirmed</span></div>
+      <div class="rcard"><div class="rco">&#x1F4CA; Pipeline</div><div class="rdet">200+ processed · 20+ outreach</div><span class="rst s-done">25% response rate</span></div>
+      <div class="rcard"><div class="rco">&#x26A1; Speed</div><div class="rdet">HN listing &#x2192; email &#x2192; track in &lt;2h</div><span class="rst s-warm">0 human hours</span></div>
+    </div>
+  </div>
+</section>
 
-    <!-- FLOW -->
-    <div class="flow">
-      <div class="flow-step">
-        <div class="flow-step-num">Step 01</div>
-        <div class="flow-step-title">Platform Scan</div>
-        <div class="flow-step-desc">Agents scrape HN "Who's Hiring", WeWorkRemotely, Upwork, aitmpl.com for matching opportunities</div>
+<hr>
+
+<!-- PULSO -->
+<section id="pulso">
+  <div class="container">
+    <p class="slabel rev">03 · Case Study</p>
+    <h2 class="rev">Pulso:<br><span class="grad">End-to-End Client Delivery</span></h2>
+    <p class="ssub rev">Marketing automation program for aesthetic clinics. From onboarding to website launch — all orchestrated by agents. R$3k–10k/month recurring revenue.</p>
+
+    <div class="timeline rev">
+      <div class="titem">
+        <div class="tdot"></div>
+        <div class="tweek">Week 1</div>
+        <div class="ttit">Onboarding &amp; Research</div>
+        <p style="font-size:.84rem;color:var(--text2)">CEO creates epic. Content Creator interviews client. Designer starts moodboard. Web Builder sets up infrastructure.</p>
+        <div class="tchips"><span class="chip">CEO</span><span class="chip">Content Creator</span><span class="chip">Designer</span><span class="chip">Web Builder</span></div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 02</div>
-        <div class="flow-step-title">AI Scoring</div>
-        <div class="flow-step-desc">Multi-factor scoring: tech stack fit, remote allowance, AI policy, pay range, LATAM acceptance</div>
+      <div class="titem">
+        <div class="tdot"></div>
+        <div class="tweek">Weeks 2–3</div>
+        <div class="ttit">Parallel Execution</div>
+        <p style="font-size:.84rem;color:var(--text2)">All agents execute in parallel. 40+ deliverables generated across strategy, design, code, and content.</p>
+        <div class="tchips"><span class="chip">Playbooks</span><span class="chip">Logo + Brand</span><span class="chip">Website</span><span class="chip">Editorial Calendar</span><span class="chip">Ad Creatives</span></div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 03</div>
-        <div class="flow-step-title">Cold Outreach</div>
-        <div class="flow-step-desc">Personalized emails generated per opportunity — no templates, contextual hooks from job posts</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 04</div>
-        <div class="flow-step-title">Pipeline Track</div>
-        <div class="flow-step-desc">Agents monitor replies, schedule follow-ups, update pipeline.md, brief CEO on thread activity</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 05</div>
-        <div class="flow-step-title">Board Decision</div>
-        <div class="flow-step-desc">Human board reviews scored leads, approves outreach and applications — final authority stays human</div>
+      <div class="titem">
+        <div class="tdot"></div>
+        <div class="tweek">Week 4</div>
+        <div class="ttit">Delivery &amp; Launch</div>
+        <p style="font-size:.84rem;color:var(--text2)">Client presentation. Website goes live. n8n automation workflows activated. 2-week support included.</p>
+        <div class="tchips"><span class="chip">Deploy</span><span class="chip">n8n automations</span><span class="chip">Training</span><span class="chip">Support</span></div>
       </div>
     </div>
 
-    <!-- REAL RESULTS -->
-    <div class="card" style="margin-top:20px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-        <div>
-          <div style="font-size:14px;font-weight:700;color:var(--white)">Live Pipeline — April 2026 Scan</div>
-          <div style="font-size:12px;color:var(--text-muted)">Real opportunities found and processed by agents</div>
-        </div>
-        <div class="badge badge-green">● Active</div>
+    <p class="slabel rev" style="margin-top:3rem">Real Case — Hanna Ornato (Aesthetic Clinic, São Paulo)</p>
+    <p style="font-size:.86rem;color:var(--text2);margin-bottom:1.5rem;max-width:600px" class="rev">4 employees, 200 patients/month. Zero digital presence before Pulso. Everything below was generated by agents in 4 weeks.</p>
+
+    <div class="delivs rev">
+      <div class="deliv"><div class="dico">&#x1F4CA;</div><div><div class="dname">Digital Diagnosis</div><div class="ddet">15KB · Google My Business audit, competitor analysis, R$30k/mo revenue loss estimate</div></div></div>
+      <div class="deliv"><div class="dico">&#x1F5FA;&#xFE0F;</div><div><div class="dname">6-Month Strategic Plan</div><div class="ddet">25KB · Milestones, budgets, ROI projections. Target: 200 → 500 patients/month</div></div></div>
+      <div class="deliv"><div class="dico">&#x1F4AC;</div><div><div class="dname">15 WhatsApp Scripts</div><div class="ddet">32KB · Ready-to-use templates for inquiry, follow-up, and upsell scenarios</div></div></div>
+      <div class="deliv"><div class="dico">&#x1F4F1;</div><div><div class="dname">6-Month Editorial Calendar</div><div class="ddet">40KB · 26 weeks × 4 posts/week = 78 posts with full captions written</div></div></div>
+      <div class="deliv"><div class="dico">&#x1F3AF;</div><div><div class="dname">Paid Traffic Plan</div><div class="ddet">39KB · Google Ads + Meta + WhatsApp broadcast with budgets and expected CPCs</div></div></div>
+      <div class="deliv"><div class="dico">&#x1F310;</div><div><div class="dname">Full Website (Live)</div><div class="ddet">Next.js + Tailwind · Online scheduling · Blog · WhatsApp widget · 95+ PageSpeed · Live Apr 20</div></div></div>
+    </div>
+
+    <div class="term rev" style="margin-top:2.5rem">
+      <div class="term-hdr"><span class="td td-r"></span><span class="td td-y"></span><span class="td td-g"></span><span class="term-lbl">deployed-sites.log</span></div>
+      <div class="term-body">
+<span class="tp">$</span> <span class="tb">curl</span> -I https://pulso.icebergcompany.com.br<br>
+<span class="tg">HTTP/2 200</span> <span class="tgr">· Pulso Landing Page · Next.js + Tailwind · LIVE ✓</span><br><br>
+<span class="tp">$</span> <span class="tb">curl</span> -I https://hanna-ornato.com.br<br>
+<span class="tg">HTTP/2 200</span> <span class="tgr">· Hanna Clinic Site · Deployed Apr 20, 2026 · LIVE ✓</span><br><br>
+<span class="tp">$</span> <span class="tb">curl</span> -I https://oguidomingos.github.io/investor-pack/<br>
+<span class="tg">HTTP/2 200</span> <span class="tgr">· Investor Pack Interactive HTML · GitHub Pages · LIVE ✓</span>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Company</th>
-              <th>Role</th>
-              <th>Source</th>
-              <th>Comp</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong style="color:var(--white)">Deepline</strong></td>
-              <td>Founding Full-Stack Engineer</td>
-              <td class="td-dim">HN Who's Hiring</td>
-              <td class="td-mono">$160-220K + equity</td>
-              <td><span class="badge badge-green">📅 Call Done</span></td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--white)">Confluence Research</strong></td>
-              <td>Hourly Consultant</td>
-              <td class="td-dim">HN Who's Hiring</td>
-              <td class="td-mono">$100-300/hr</td>
-              <td><span class="badge badge-green">✅ Zoom Confirmed</span></td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--white)">Integral</strong></td>
-              <td>Full Stack Developer</td>
-              <td class="td-dim">HN Who's Hiring</td>
-              <td class="td-mono">$40-90/hr</td>
-              <td><span class="badge badge-primary">✉️ Sent</span></td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--white)">Luxury Presence</strong></td>
-              <td>Staff SWE — CRM LATAM</td>
-              <td class="td-dim">aitmpl.com</td>
-              <td class="td-mono">Senior comp</td>
-              <td><span class="badge badge-amber">⏳ Board Approval</span></td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--white)">Oneleet (YC S22)</strong></td>
-              <td>Fullstack AI Engineer</td>
-              <td class="td-dim">HN Who's Hiring</td>
-              <td class="td-mono">Competitive</td>
-              <td><span class="badge badge-primary">✉️ Sent</span></td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--white)">MinimalistechOS</strong></td>
-              <td>Claude Code Engineer</td>
-              <td class="td-dim">aitmpl.com</td>
-              <td class="td-mono">Remote-first</td>
-              <td><span class="badge badge-primary">✉️ Sent</span></td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--white)">Zed Industries</strong></td>
-              <td>AI Rust Engineer</td>
-              <td class="td-dim">HN Who's Hiring</td>
-              <td class="td-mono">Market rate</td>
-              <td><span class="badge badge-amber">⏳ Board Approval</span></td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- OUTPUTS -->
+<section id="outputs">
+  <div class="container">
+    <p class="slabel rev">04 · Evidence</p>
+    <h2 class="rev">Real Outputs.<br><span class="grad">Not Slides. Not Demos.</span></h2>
+    <p class="ssub rev">Everything below was autonomously produced by agents running on Paperclip. Verifiable, deployed, measurable.</p>
+
+    <div class="stats">
+      <div class="scard rev"><div class="snum" style="color:var(--accent2)" data-count="10">10</div><div class="slbl">Specialized Agents</div></div>
+      <div class="scard rev d1"><div class="snum" style="color:var(--green)" data-count="40" data-suffix="+">40+</div><div class="slbl">Documents Generated</div></div>
+      <div class="scard rev d2"><div class="snum" style="color:var(--yellow)" data-count="200" data-suffix="+">200+</div><div class="slbl">Leads Processed</div></div>
+      <div class="scard rev d3"><div class="snum" style="color:var(--accent2)" data-count="3">3</div><div class="slbl">Sites Live</div></div>
+      <div class="scard rev d4"><div class="snum" style="color:var(--green)" data-count="25" data-suffix="%">25%</div><div class="slbl">Response Rate</div></div>
+    </div>
+
+    <div class="ocols">
+      <div class="ocol rev">
+        <div class="ocol-hdr"><div class="ocol-ico" style="background:rgba(99,102,241,.15)">&#x1F4C4;</div><div><div class="ocol-t">Strategy Docs</div><div class="ocol-c">200KB+ structured documentation</div></div></div>
+        <div class="oitem"><span class="ocheck">✓</span>Digital Diagnosis — Hanna (15KB)</div>
+        <div class="oitem"><span class="ocheck">✓</span>6-Month Plan — Hanna (25KB)</div>
+        <div class="oitem"><span class="ocheck">✓</span>Paid Traffic Plan (39KB)</div>
+        <div class="oitem"><span class="ocheck">✓</span>Editorial Calendar — 26 weeks (40KB)</div>
+        <div class="oitem"><span class="ocheck">✓</span>Sales Closing Playbook (33KB)</div>
+        <div class="oitem"><span class="ocheck">✓</span>Pulso Onboarding Playbook v2 (25KB)</div>
+        <div class="oitem"><span class="ocheck">✓</span>WhatsApp Scripts — 15 templates (32KB)</div>
+      </div>
+      <div class="ocol rev d1">
+        <div class="ocol-hdr"><div class="ocol-ico" style="background:rgba(16,185,129,.15)">&#x1F310;</div><div><div class="ocol-t">Deployed Sites</div><div class="ocol-c">3 live, 95+ PageSpeed score</div></div></div>
+        <div class="oitem"><span class="ocheck">✓</span>pulso.icebergcompany.com.br</div>
+        <div class="oitem"><span class="ocheck">✓</span>hanna-ornato.com.br — Clinic Website</div>
+        <div class="oitem"><span class="ocheck">✓</span>Investor Pack — Interactive HTML</div>
+        <div class="oitem"><span class="ocheck">✓</span>Next.js + TailwindCSS stack</div>
+        <div class="oitem"><span class="ocheck">✓</span>n8n workflow integrations</div>
+        <div class="oitem"><span class="ocheck">✓</span>Stripe + Calendar integrations</div>
+        <div class="oitem"><span class="ocheck">✓</span>Vercel + GitHub Pages deployments</div>
+      </div>
+      <div class="ocol rev d2">
+        <div class="ocol-hdr"><div class="ocol-ico" style="background:rgba(245,158,11,.15)">&#x1F3A8;</div><div><div class="ocol-t">Design Assets</div><div class="ocol-c">Full brand systems</div></div></div>
+        <div class="oitem"><span class="ocheck">✓</span>Florizz — 42 logo variations</div>
+        <div class="oitem"><span class="ocheck">✓</span>Pulso brand identity + guidelines</div>
+        <div class="oitem"><span class="ocheck">✓</span>Instagram carousel templates</div>
+        <div class="oitem"><span class="ocheck">✓</span>Stories + Reel scripts (9:16 format)</div>
+        <div class="oitem"><span class="ocheck">✓</span>Meta Ads creatives — 6 variations</div>
+        <div class="oitem"><span class="ocheck">✓</span>Social media design system</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- DEEPLINE -->
+<section id="deepline">
+  <div class="container">
+    <p class="slabel rev">05 · Integration Proposal</p>
+    <h2 class="rev">Why Deepline<br><span class="grad">Makes Our Stack Better</span></h2>
+    <p class="ssub rev">We already send personalized cold emails. With Deepline enrichment, every prospect gets company-specific intelligence before we write a single word.</p>
+
+    <div class="intbox rev">
+      <div class="intflow">
+        <div class="inode"><div class="ibox"><div class="iico">&#x1F50D;</div><div class="iname">Career-Ops Scanner</div><div class="idet">HN · Upwork · aitmpl</div></div><div style="font-size:.7rem;color:var(--text3)">Raw listings</div></div>
+        <div class="iarrow">→</div>
+        <div class="inode"><div class="ibox dl"><div class="iico">&#x26A1;</div><div class="iname">Deepline API</div><div class="idet">Lead enrichment</div></div><div style="font-size:.7rem;color:var(--accent2);font-weight:600">+ Company intelligence</div></div>
+        <div class="iarrow">→</div>
+        <div class="inode"><div class="ibox"><div class="iico">&#x1F9E0;</div><div class="iname">LLM Email Gen</div><div class="idet">Personalized draft</div></div><div style="font-size:.7rem;color:var(--text3)">Context-aware</div></div>
+        <div class="iarrow">→</div>
+        <div class="inode"><div class="ibox"><div class="iico">&#x1F4E8;</div><div class="iname">Evolution API</div><div class="idet">Send + Track</div></div><div style="font-size:.7rem;color:var(--text3)">Email + WhatsApp</div></div>
+        <div class="iarrow">→</div>
+        <div class="inode"><div class="ibox"><div class="iico">&#x1F4CA;</div><div class="iname">Paperclip</div><div class="idet">Pipeline tracking</div></div><div style="font-size:.7rem;color:var(--text3)">CEO monitors</div></div>
       </div>
     </div>
 
-    <div style="margin-top:16px" class="grid3">
-      <div class="kpi-card">
-        <div class="kpi-label">Platforms Scanned</div>
-        <div class="kpi-value">6+</div>
-        <div class="kpi-sub">HN, WWR, Upwork, aitmpl.com, Gem, Algora</div>
+    <div class="ba rev">
+      <div class="bcard">
+        <div class="bh bef">Without Deepline — Current State</div>
+        <div class="bmet"><span class="bml">Email personalization</span><span class="bmv bad">Generic hooks</span></div>
+        <div class="bmet"><span class="bml">Company data depth</span><span class="bmv bad">Website scrape only</span></div>
+        <div class="bmet"><span class="bml">Open rate (estimated)</span><span class="bmv bad">~10-15%</span></div>
+        <div class="bmet"><span class="bml">Response rate (actual)</span><span class="bmv">25%</span></div>
+        <div class="bmet"><span class="bml">Research per prospect</span><span class="bmv bad">5-10 min (LLM)</span></div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Emails Sent</div>
-        <div class="kpi-value">8</div>
-        <div class="kpi-sub">Cold outreach in 1 scan cycle, 100% personalized</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Positive Replies</div>
-        <div class="kpi-value">2</div>
-        <div class="kpi-sub">Deepline call + Confluence Zoom — 25% reply rate</div>
-      </div>
-    </div>
-
-    <!-- How the agent wrote the email -->
-    <div style="margin-top:24px">
-      <div class="eyebrow" style="margin-bottom:12px">How the Agent Writes Cold Emails</div>
-      <div class="code-block" data-lang="Agent output">
-<span class="code-comment"># Career-Ops Agent — Cold Email Generation for Deepline</span>
-
-<span class="code-comment"># 1. Parse job post for context hooks</span>
-<span class="code-kw">job_context</span> = <span class="code-str">"Claude Code integration, GTM tools, NYC onsite"</span>
-<span class="code-kw">our_match</span>  = <span class="code-str">"Production Paperclip platform — multi-agent Claude Code orchestration"</span>
-
-<span class="code-comment"># 2. Generated email body (sent 14/Apr to team@deepline.com)</span>
-<span class="code-comment"># ---</span>
-<span class="code-comment"># Subject: Paperclip → multi-agent platform that your clients wish they had</span>
-<span class="code-comment">#</span>
-<span class="code-comment"># Hi Saf,</span>
-<span class="code-comment"># I build and operate Paperclip, a production multi-agent AI platform</span>
-<span class="code-comment"># that orchestrates Claude Code agents across real client work.</span>
-<span class="code-comment">#</span>
-<span class="code-comment"># Stack match: TypeScript, Node.js, PostgreSQL — agent-facing APIs,</span>
-<span class="code-comment"># MCP servers, orchestration layers.</span>
-<span class="code-comment">#</span>
-<span class="code-comment"># Result: Deepline replied in 6 days → call booked → now here</span>
-
-<span class="code-comment"># 3. Track in pipeline.md</span>
-<span class="code-kw">status</span> = <span class="code-val">"✅ ENVIADO 14/Abr — REPLY 20/Abr"</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- PULSO -->
-  <section id="pulso">
-    <div class="eyebrow">Case Study 02</div>
-    <h2 class="section-title">Pulso — Automated Client Delivery</h2>
-    <p class="section-sub">Full client onboarding and delivery pipeline for a B2B SaaS selling to medical clinics in Brazil. Agents handle prospecting, website building, branding, pitch decks, and sales playbooks — end to end.</p>
-
-    <!-- FLOW -->
-    <div class="flow">
-      <div class="flow-step">
-        <div class="flow-step-num">Step 01</div>
-        <div class="flow-step-title">Lead Discovery</div>
-        <div class="flow-step-desc">Growth agent scrapes clinic databases, enriches with location/specialty data</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 02</div>
-        <div class="flow-step-title">Outreach</div>
-        <div class="flow-step-desc">Personalized WhatsApp / email sequences via Evolution API + CDP automation</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 03</div>
-        <div class="flow-step-title">Proposal Build</div>
-        <div class="flow-step-desc">Agents auto-generate clinic-specific proposals, financial models, pitch decks</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 04</div>
-        <div class="flow-step-title">Website Deploy</div>
-        <div class="flow-step-desc">Web Builder agent creates and deploys production sites for each clinic client</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
-        <div class="flow-step-num">Step 05</div>
-        <div class="flow-step-title">Brand Package</div>
-        <div class="flow-step-desc">Designer agent creates logos, brand identity, 40+ variations per client</div>
+      <div class="bcard after">
+        <div class="bh aft">With Deepline — Projected</div>
+        <div class="bmet"><span class="bml">Email personalization</span><span class="bmv good">Funding · tech stack · team</span></div>
+        <div class="bmet"><span class="bml">Company data depth</span><span class="bmv good">Enriched intelligence</span></div>
+        <div class="bmet"><span class="bml">Open rate (projected)</span><span class="bmv good">~25-35%</span></div>
+        <div class="bmet"><span class="bml">Response rate (projected)</span><span class="bmv good">35%+</span></div>
+        <div class="bmet"><span class="bml">Research per prospect</span><span class="bmv good">&lt;1 min (API)</span></div>
       </div>
     </div>
 
-    <div class="grid2" style="margin-top:20px">
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:16px">Deliverables Produced by Agents</div>
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Branding Sprint</div>
-            <div class="tl-title">42 logo variations generated</div>
-            <div class="tl-body">Designer agent + Creative Director ran full brand identity for Florizz clinic brand — colors, typography, logo variants, brand guide</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Pitch Deck</div>
-            <div class="tl-title">Investor deck for Pulso (for Eduardo, investor)</div>
-            <div class="tl-body">Full deck with unit economics, payback model, TAM analysis, competitive positioning — generated by Content Creator + CMO agents</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Landing Page</div>
-            <div class="tl-title">Production LP deployed to icebergcompany.com.br</div>
-            <div class="tl-body">Web Builder agent built full responsive React/HTML site — proposal page, commercial materials, clinic-specific variants</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Outreach Campaign</div>
-            <div class="tl-title">Clinic prospecting — American landings sector</div>
-            <div class="tl-body">Growth agent found clinics via maps, profiled positioning, built template website, sent personalized emails — closed meeting when target replied</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="kpi-card">
-          <div class="kpi-label">Playbooks Generated</div>
-          <div class="kpi-value">12</div>
-          <div class="kpi-sub">Sales scripts, onboarding flows, pricing models — all agent-authored</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Sites Deployed</div>
-          <div class="kpi-value">3+</div>
-          <div class="kpi-sub">Pulso LP, proposal pages, client showcase sites — production</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Human Hours Saved</div>
-          <div class="kpi-value">~200h</div>
-          <div class="kpi-sub">Per client cycle vs traditional agency delivery</div>
-        </div>
-        <div class="success-box">
-          <div class="success-title">Real Quote — Deepline Call</div>
-          <div style="font-size:13px;color:var(--text-dim);font-style:italic;line-height:1.7">"I did some active prospection in American landings. We found them into the maps. We looked into how they position themselves. We built a template website. We mailed them. Then when they answered, we scheduled them. So everything is very orchestrated."</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:8px">— Described to Saf during the April 24 call</div>
-        </div>
-      </div>
+    <div class="callout rev" style="margin-top:2rem">
+      <strong>Next step:</strong> Integrate Deepline free credits into Career-Ops n8n workflow this week. A/B test: 10 emails with enrichment vs 10 without. Results documented and shared with Saf as feedback.
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- OUTPUTS -->
-  <section id="outputs">
-    <div class="eyebrow">Real Outputs</div>
-    <h2 class="section-title">What Agents Actually Produce</h2>
-    <p class="section-sub">These aren't demos or mockups. Every item below is a real artifact generated by Paperclip agents running in production on this VPS.</p>
+<hr>
 
-    <div class="grid3">
-      <div class="output-card">
-        <div class="output-icon">📄</div>
-        <div class="output-title">Investor Pack v3</div>
-        <div class="output-meta">HTML · Financial model · Charts · 3-year projections</div>
-        <div>
-          <span class="output-tag">React/HTML</span>
-          <span class="output-tag">Chart.js</span>
-          <span class="output-tag">Agent-built</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">🌐</div>
-        <div class="output-title">Pulso Landing Page</div>
-        <div class="output-meta">Production site · Mobile-first · Deployed to VPS</div>
-        <div>
-          <span class="output-tag">TypeScript</span>
-          <span class="output-tag">Tailwind</span>
-          <span class="output-tag">Production</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">🏥</div>
-        <div class="output-title">IIBPR Proposal Site</div>
-        <div class="output-meta">Custom clinic proposal · Pricing · Onboarding flow</div>
-        <div>
-          <span class="output-tag">HTML</span>
-          <span class="output-tag">Mobile</span>
-          <span class="output-tag">Client-facing</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">🎨</div>
-        <div class="output-title">Florizz Brand Identity</div>
-        <div class="output-meta">42 logo variations · Color palette · Typography system</div>
-        <div>
-          <span class="output-tag">SVG</span>
-          <span class="output-tag">Brand guide</span>
-          <span class="output-tag">42 variants</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">📊</div>
-        <div class="output-title">Pitch Deck — Edu</div>
-        <div class="output-meta">Investor pitch · TAM analysis · Unit economics</div>
-        <div>
-          <span class="output-tag">Financial model</span>
-          <span class="output-tag">Deck</span>
-          <span class="output-tag">Investor</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">🔍</div>
-        <div class="output-title">Career-Ops Pipeline</div>
-        <div class="output-meta">6+ platforms · Real emails sent · 2 calls booked</div>
-        <div>
-          <span class="output-tag">8 emails</span>
-          <span class="output-tag">25% reply rate</span>
-          <span class="output-tag">Live</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">📚</div>
-        <div class="output-title">40+ MDs of Documentation</div>
-        <div class="output-meta">Playbooks · Briefings · Meeting notes · Strategies</div>
-        <div>
-          <span class="output-tag">Markdown</span>
-          <span class="output-tag">Structured</span>
-          <span class="output-tag">Versioned</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">💬</div>
-        <div class="output-title">WhatsApp Outreach Automation</div>
-        <div class="output-meta">Evolution API · CDP-driven · Clinic prospecting</div>
-        <div>
-          <span class="output-tag">Evolution API</span>
-          <span class="output-tag">Node.js</span>
-          <span class="output-tag">300+ leads</span>
-        </div>
-      </div>
-      <div class="output-card">
-        <div class="output-icon">📈</div>
-        <div class="output-title">Polymarket Trading System</div>
-        <div class="output-meta">Signal-based · Backtested · Automated execution</div>
-        <div>
-          <span class="output-tag">Python</span>
-          <span class="output-tag">Backtested</span>
-          <span class="output-tag">Live signals</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CODE -->
-  <section id="code">
-    <div class="eyebrow">Technical Depth</div>
-    <h2 class="section-title">Real Integrations &amp; Code</h2>
-    <p class="section-sub">Paperclip agents don't use drag-and-drop tools. They write production TypeScript/Python, call APIs directly, and deploy real infrastructure.</p>
-
-    <div class="grid2">
-      <div>
-        <div style="font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">Agent Coordination API</div>
-        <div class="code-block" data-lang="TypeScript">
-<span class="code-comment">// How the CEO agent delegates a task to Web Builder</span>
-<span class="code-kw">const</span> <span class="code-key">issue</span> = <span class="code-kw">await</span> fetch(<span class="code-str">`/api/issues/${taskId}/checkout`</span>, {
-  method: <span class="code-str">'POST'</span>,
-  body: JSON.stringify({
-    agentId: <span class="code-str">'c4539806-ed89-4a48-bd70-05e88bee38f7'</span>,
-    expectedStatuses: [<span class="code-str">'todo'</span>, <span class="code-str">'in_progress'</span>]
-  })
-})
-
-<span class="code-comment">// Agent posts result with evidence</span>
-<span class="code-kw">await</span> fetch(<span class="code-str">`/api/issues/${id}/comments`</span>, {
-  method: <span class="code-str">'POST'</span>,
-  headers: { <span class="code-str">'X-Paperclip-Run-Id'</span>: runId },
-  body: JSON.stringify({
-    body: <span class="code-str">'## Delivered ✅\n\n@CEO — site deployed to...'</span>
-  })
-})
-        </div>
-      </div>
-      <div>
-        <div style="font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">CDP Outreach Automation</div>
-        <div class="code-block" data-lang="Node.js">
-<span class="code-comment">// WhatsApp outreach via Evolution API + CDP</span>
-<span class="code-kw">const</span> <span class="code-key">sendToClinic</span> = <span class="code-kw">async</span> (clinic) => {
-  <span class="code-kw">const</span> msg = generatePersonalized(clinic)
-
-  <span class="code-comment">// Evolution API — production WhatsApp</span>
-  <span class="code-kw">await</span> fetch(
-    <span class="code-str">`${EVOLUTION_URL}/message/sendText`</span>,
-    {
-      headers: { <span class="code-str">'apikey'</span>: process.env.EVOLUTION_KEY },
-      body: JSON.stringify({
-        number: clinic.whatsapp,
-        text: msg,
-        delay: <span class="code-num">1200</span>
-      })
-    }
-  )
-}
-
-<span class="code-comment">// 300+ clinics reached in single batch</span>
-<span class="code-kw">await</span> Promise.allSettled(clinics.map(sendToClinic))
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">Agent AGENTS.md — System Prompt Pattern</div>
-      <div class="code-block" data-lang="Markdown">
-<span class="code-comment">## Role</span>
-<span class="code-val">You are the Web Builder. You create production-ready websites for agency clients.</span>
-
-<span class="code-comment">## Tech Stack</span>
-<span class="code-str">- Framework: React 18+ with Vite</span>
-<span class="code-str">- Language: TypeScript (strict mode)</span>
-<span class="code-str">- Styling: Tailwind CSS 3+</span>
-<span class="code-str">- Components: shadcn/ui (Radix UI primitives)</span>
-<span class="code-str">- Backend: Supabase (auth, database, storage)</span>
-
-<span class="code-comment">## Plugins &amp; Skills (installed — use proactively)</span>
-<span class="code-str">- feature-dev:feature-dev     # architecture before coding</span>
-<span class="code-str">- typescript-lsp              # type-safe development</span>
-<span class="code-str">- playwright:playwright       # e2e tests</span>
-<span class="code-str">- chrome-devtools-mcp         # debug layout/performance</span>
-<span class="code-str">- superpowers:verification-before-completion  # before marking done</span>
-
-<span class="code-comment">## Governance</span>
-<span class="code-str">- Notify CEO on every task closed with @mention</span>
-<span class="code-str">- Post evidence (screenshots, URLs, test results)</span>
-<span class="code-str">- Never deploy without CEO approval on scope</span>
-      </div>
-    </div>
-
-    <div style="margin-top:16px" class="grid3">
-      <div class="card2">
-        <div class="kpi-label">Languages Used</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
-          <span class="badge badge-primary">TypeScript</span>
-          <span class="badge badge-cyan">Python</span>
-          <span class="badge badge-primary">Node.js</span>
-          <span class="badge badge-dim">Bash</span>
-          <span class="badge badge-dim">SQL</span>
-        </div>
-      </div>
-      <div class="card2">
-        <div class="kpi-label">External APIs</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
-          <span class="badge badge-primary">Claude API</span>
-          <span class="badge badge-cyan">Evolution API</span>
-          <span class="badge badge-dim">Supabase</span>
-          <span class="badge badge-dim">Polymarket</span>
-        </div>
-      </div>
-      <div class="card2">
-        <div class="kpi-label">Infrastructure</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
-          <span class="badge badge-primary">VPS (Nginx)</span>
-          <span class="badge badge-cyan">GitHub Pages</span>
-          <span class="badge badge-dim">Claude Code</span>
-          <span class="badge badge-dim">MCP Servers</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DEEPLINE FIT -->
-  <section id="deepline">
-    <div class="eyebrow">Why Deepline</div>
-    <h2 class="section-title">Where Deepline Fits In</h2>
-    <p class="section-sub">Paperclip agents already run GTM workflows — prospecting, enrichment, outreach, follow-ups. Deepline is the missing data layer that connects 40+ providers we currently handle manually.</p>
-
-    <div class="grid2">
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:16px">Current Career-Ops Flow → With Deepline</div>
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-dot" style="background:var(--amber)"></div>
-            <div class="tl-date">Today (manual enrichment)</div>
-            <div class="tl-title">Parse HN post → extract email → cold reach</div>
-            <div class="tl-body">Agents manually extract contact info from job posts. No enrichment, no waterfall, limited data depth.</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot" style="background:var(--green)"></div>
-            <div class="tl-date">With Deepline Context API</div>
-            <div class="tl-title">Company → execs → verified emails → persona mapping</div>
-            <div class="tl-body">One Deepline call returns enriched exec data, waterfall email verification (Apollo → Hunter → PDL), and buying signals — ready for personalized outreach.</div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot" style="background:var(--primary)"></div>
-            <div class="tl-date">Pulso — Clinic Prospecting</div>
-            <div class="tl-title">Maps data → clinic execs → enriched contacts</div>
-            <div class="tl-body">Currently 300+ cold WhatsApp messages to unverified numbers. Deepline enrichment would add email + LinkedIn + practice size for precision targeting.</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="highlight">
-          <div class="highlight-title">Technical Overlap — Why This Works</div>
-          <div class="info-row"><span class="info-check">✓</span><span>Both systems run <strong>inside Claude Code</strong> — Deepline CLI + Paperclip agents = native integration</span></div>
-          <div class="info-row"><span class="info-check">✓</span><span>Paperclip agents already write <strong>TypeScript + Node.js + PostgreSQL</strong> — exact Deepline stack</span></div>
-          <div class="info-row"><span class="info-check">✓</span><span>Multi-agent orchestration = perfect consumer for Deepline's <strong>Context API</strong> and <strong>waterfall enrichment</strong></span></div>
-          <div class="info-row"><span class="info-check">✓</span><span>We operate in production — not a sandbox. Deepline feedback will be <strong>real-world signal</strong></span></div>
-        </div>
-        <div class="card2">
-          <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:10px">Proposed Integration — Week 1</div>
-          <div class="code-block" data-lang="Concept" style="font-size:11px">
-<span class="code-comment"># Career-Ops + Deepline Context API</span>
-
-<span class="code-comment"># Find job posting → extract company</span>
-company = <span class="code-str">"Deepline"</span>
-
-<span class="code-comment"># One call to Deepline replaces manual extraction</span>
-data = deepline.context({
-  query: <span class="code-str">"Find decision makers at Deepline"</span>,
-  enrich: [<span class="code-str">"email"</span>, <span class="code-str">"linkedin"</span>, <span class="code-str">"title"</span>],
-  waterfall: [<span class="code-str">"apollo"</span>, <span class="code-str">"hunter"</span>, <span class="code-str">"pdl"</span>]
-})
-
-<span class="code-comment"># Agent uses enriched data for personalized cold reach</span>
-email = agents.content_creator.draft(data)
-          </div>
-        </div>
-        <div class="success-box">
-          <div class="success-title">Saf's Ask — Delivered</div>
-          <div class="info-row"><span class="info-check">✓</span><span>"Show me your agentic workflows" → This page</span></div>
-          <div class="info-row"><span class="info-check">✓</span><span>"Prove technical depth" → Code + real outputs shown above</span></div>
-          <div class="info-row"><span class="info-check">✓</span><span>"Try Deepline in a workflow" → Integration plan ready, using free credits next</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</div><!-- /page -->
-
-<div class="footer">
-  <div class="footer-left">Paperclip · Agentic Workflows Showcase · Built for Deepline / Saf · April 2026</div>
-  <div class="footer-right">github.com/oguidomingos · saf@deepline.com</div>
-</div>
+<footer>
+  <div class="flogo">Paperclip · Icebergcompany</div>
+  <p class="fsub">Multi-agent orchestration for GTM automation · April 2026</p>
+  <ul class="flinks">
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#career-ops">Career-Ops</a></li>
+    <li><a href="#pulso">Pulso</a></li>
+    <li><a href="#outputs">Outputs</a></li>
+    <li><a href="#deepline">Deepline</a></li>
+    <li><a href="https://oguidomingos.github.io/investor-pack/" target="_blank" rel="noopener">Investor Pack →</a></li>
+  </ul>
+</footer>
 
 <script>
-// Scroll progress bar
-window.addEventListener('scroll', () => {
-  const doc = document.documentElement;
-  const pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
-  document.getElementById('scrollLine').style.width = pct + '%';
-});
+// Scroll reveal
+const reveals=document.querySelectorAll('.rev');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+reveals.forEach(el=>obs.observe(el));
 
-// Nav active state
-const sections = ['architecture','careerops','pulso','outputs','code','deepline'];
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const id = e.target.id;
-      document.querySelectorAll('.nav-link').forEach((l, i) => {
-        l.classList.toggle('active', sections[i] === id);
-      });
+// Counter animation
+function animCount(el,target,suffix){
+  const dur=1200,start=performance.now();
+  (function upd(now){
+    const p=Math.min((now-start)/dur,1);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(target*eased)+(p<1?'':(suffix||''));
+    if(p<1)requestAnimationFrame(upd);
+  })(start);
+}
+const sc=document.querySelectorAll('.scard');
+const scobs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const n=e.target.querySelector('.snum');
+      if(n&&!n.dataset.done){
+        n.dataset.done='1';
+        const v=parseInt(n.dataset.count);
+        const s=n.dataset.suffix||'';
+        if(!isNaN(v))animCount(n,v,s);
+      }
     }
   });
-}, {rootMargin: '-50% 0px -50% 0px'});
+},{threshold:.5});
+sc.forEach(c=>scobs.observe(c));
 
-sections.forEach(id => {
-  const el = document.getElementById(id);
-  if (el) observer.observe(el);
-});
-
-function scrollToSection(id) {
-  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
-}
+// Active nav
+const sects=document.querySelectorAll('section[id]');
+const nlinks=document.querySelectorAll('.nav-links a');
+const navobs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      nlinks.forEach(l=>{l.style.color=l.getAttribute('href')==='#'+id?'var(--text)':''});
+    }
+  });
+},{threshold:.4});
+sects.forEach(s=>navobs.observe(s));
 </script>
 </body>
 </html>
